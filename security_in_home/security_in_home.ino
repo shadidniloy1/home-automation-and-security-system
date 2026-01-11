@@ -1,23 +1,50 @@
-#define SENSOR_PIN 27  // PIR sensor OUT connected here
-#define LED_PIN 2     // Internal LED
+const int pirPin = 27;     
+const int ledPin = 25;     
+const int buttonPin = 14;  
+bool armed = false;
 
 void setup() {
   Serial.begin(115200);
-  pinMode(SENSOR_PIN, INPUT);
-  pinMode(LED_PIN, OUTPUT);
-  Serial.println("--- Simple Motion Test Starting ---");
+  pinMode(pirPin, INPUT_PULLUP);
+  pinMode(ledPin, OUTPUT);
+  pinMode(buttonPin, INPUT_PULLUP);
+  digitalWrite(ledPin, LOW);
+  delay(20000);
+  
+  Serial.println("Security System Ready - Button toggles ARM/DISARM");
+  printStatus();
 }
 
 void loop() {
-  int val = digitalRead(SENSOR_PIN); // Read the pin state (0 or 1)
+  // Check button first
+  static bool lastButton = HIGH;
+  bool button = digitalRead(buttonPin);
+  if (button == LOW && lastButton == HIGH) {  // Button pressed (rising edge)
+    armed = !armed;
+    delay(50);  // Debounce
+    printStatus();
+  }
+  lastButton = button;
   
-  if (val == HIGH) {
-    digitalWrite(LED_PIN, HIGH);
-    Serial.println("1 - MOTION!");
-  } else {
-    digitalWrite(LED_PIN, LOW);
-    Serial.println("0 - scanning...");
+  // Motion check ONLY when armed (silent when disarmed)
+  static bool lastPir = LOW;
+  bool pir = digitalRead(pirPin);
+  
+  if (armed) {
+    if (pir == HIGH && lastPir == LOW) {
+      digitalWrite(ledPin, HIGH);
+      Serial.println("*** MOTION DETECTED - LED ON ***");
+    } else if (pir == LOW && lastPir == HIGH) {
+      digitalWrite(ledPin, LOW);
+      Serial.println("Motion cleared - LED OFF");
+    }
   }
   
-  delay(100); // Fast refresh (10 times per second)
+  lastPir = pir;
+  delay(100);
+}
+
+void printStatus() {
+  Serial.printf("System %s\n", armed ? "ARMED" : "DISARMED");
+  Serial.println("---");
 }
