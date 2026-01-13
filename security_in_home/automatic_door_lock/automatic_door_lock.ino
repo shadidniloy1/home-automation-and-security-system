@@ -39,7 +39,7 @@ void smoothServoMove(int targetAngle) {
             delay(10); 
         }
     }
-    currentAngle = targetAngle; // Update current position
+    currentAngle = targetAngle; 
 }
 
 void loop() {
@@ -48,11 +48,11 @@ void loop() {
     Serial.print(distance);
     Serial.println(" cm");
     
-    if (distance > 0 && distance <= 30) { // If object detected within 30 cm
-        smoothServoMove(90); // Slowly open the door
-        delay(3000); // Keep it open for 3 seconds
+    if (distance > 0 && distance <= 3) { // If object detected within 3 cm
+        smoothServoMove(90);
+        delay(3000);
     } else {
-        smoothServoMove(0); // Slowly close the door
+        smoothServoMove(0);
     }
     delay(500);
 }

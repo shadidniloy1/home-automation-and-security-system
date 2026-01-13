@@ -1,7 +1,7 @@
 #include <WiFi.h>
 
-const char* hotspotSSID = "Niloy";  // ← CHANGE THIS
-const char* hotspotPassword = "aaaaaaaa"; // ← CHANGE THIS
+const char* hotspotSSID = "Niloy";  
+const char* hotspotPassword = "aaaaaaaa"; 
 
 const int pirPin = 27;
 const int ledPin = 25;
@@ -32,10 +32,9 @@ void setup() {
 }
 
 void loop() {
-  // Check WiFi status every 5 seconds
   if (millis() - lastWifiCheck > 5000) {
     wifiConnected = (WiFi.status() == WL_CONNECTED);
-    if (wifiConnected != lastWifiCheck / 5000) {  // Status changed
+    if (wifiConnected != lastWifiCheck / 5000) {  
       printStatus();
     }
     lastWifiCheck = millis();
@@ -43,11 +42,10 @@ void loop() {
   
   // ALARM only when WiFi DISCONNECTED (DISARMED)
   if (!wifiConnected && digitalRead(pirPin) == HIGH) {
-    // TRIGGER ALARM
     digitalWrite(ledPin, HIGH);
     digitalWrite(buzzerPin, HIGH);
     Serial.println("*** INTRUDER ALERT! WiFi OFF - MOTION DETECTED ***");
-    delay(1000);  // Alarm for 1s, repeat
+    delay(1000); 
     digitalWrite(ledPin, LOW);
     digitalWrite(buzzerPin, LOW);
   }

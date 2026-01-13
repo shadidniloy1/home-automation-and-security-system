@@ -1,6 +1,6 @@
 #include <EEPROM.h>
 #include <SoftwareSerial.h>
-SoftwareSerial BT_Serial(2, 3); // RX, TX
+SoftwareSerial BT_Serial(2, 3);
 
 #define Relay1 4 // Load1 Pin Out
 #define Relay2 5 // Load2 Pin Out
@@ -60,15 +60,15 @@ digitalWrite(Relay3, load3);
 digitalWrite(Relay4, load4);
 }
 
- BT_Serial.print(power); //send distance to MIT App
+ BT_Serial.print(power); 
  BT_Serial.print(";");
- BT_Serial.print(load1); //send distance to MIT App 
+ BT_Serial.print(load1); 
  BT_Serial.print(";");
- BT_Serial.print(load2); //send distance to MIT App 
+ BT_Serial.print(load2); 
  BT_Serial.print(";");
- BT_Serial.print(load3); //send distance to MIT App 
+ BT_Serial.print(load3); 
  BT_Serial.print(";");
- BT_Serial.print(load4); //send distance to MIT App 
+ BT_Serial.print(load4); 
  BT_Serial.println(";");
   
 delay(500);  
