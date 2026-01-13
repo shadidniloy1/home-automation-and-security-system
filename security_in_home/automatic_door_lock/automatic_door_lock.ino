@@ -1,17 +1,17 @@
 #include <Servo.h>
 
-#define TRIG_PIN 11   // Ultrasonic sensor trigger pin
-#define ECHO_PIN 10   // Ultrasonic sensor echo pin
-#define SERVO_PIN 3   // Servo motor control pin
+#define TRIG_PIN 11   
+#define ECHO_PIN 10   
+#define SERVO_PIN 3   
 
-Servo doorServo; // Create a servo object
-int currentAngle = 0; // Track current servo position
+Servo doorServo; 
+int currentAngle = 0; 
 
 void setup() {
     pinMode(TRIG_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
     doorServo.attach(SERVO_PIN);
-    doorServo.write(currentAngle); // Start with door closed
+    doorServo.write(currentAngle); 
     Serial.begin(9600);
 }
 
@@ -28,15 +28,15 @@ long getDistance() {
 }
 
 void smoothServoMove(int targetAngle) {
-    if (targetAngle > currentAngle) {  // If target is greater, move up
+    if (targetAngle > currentAngle) {  
         for (int angle = currentAngle; angle <= targetAngle; angle++) {
             doorServo.write(angle);
-            delay(10); // Smooth movement delay
+            delay(10); 
         }
-    } else { // If target is lower, move down
+    } else { 
         for (int angle = currentAngle; angle >= targetAngle; angle--) {
             doorServo.write(angle);
-            delay(10); // Smooth movement delay
+            delay(10); 
         }
     }
     currentAngle = targetAngle; // Update current position
@@ -48,7 +48,7 @@ void loop() {
     Serial.print(distance);
     Serial.println(" cm");
     
-    if (distance > 0 && distance <= 2) { // If object detected within 30 cm
+    if (distance > 0 && distance <= 30) { // If object detected within 30 cm
         smoothServoMove(90); // Slowly open the door
         delay(3000); // Keep it open for 3 seconds
     } else {
